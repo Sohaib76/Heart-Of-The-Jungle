@@ -36,6 +36,11 @@ namespace Platformer.Mechanics
         /// </summary>
         public bool stopJump;
 
+        /// <summary>
+        /// Set to true if the sprite is facing right by default.
+        /// </summary>
+        public bool facingRight;
+
         SpriteRenderer spriteRenderer;
         Animator animator;
         PlatformerModel model = Simulation.GetModel<PlatformerModel>();
@@ -63,9 +68,9 @@ namespace Platformer.Mechanics
             }
 
             if (move.x > 0.01f)
-                spriteRenderer.flipX = false;
+                spriteRenderer.flipX = !facingRight;
             else if (move.x < -0.01f)
-                spriteRenderer.flipX = true;
+                spriteRenderer.flipX = facingRight;
 
             animator.SetBool("grounded", IsGrounded);
             animator.SetFloat("velocityX", Mathf.Abs(velocity.x) / maxSpeed);
