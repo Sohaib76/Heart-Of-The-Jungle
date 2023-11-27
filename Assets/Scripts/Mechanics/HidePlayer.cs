@@ -1,6 +1,8 @@
+using Platformer.Mechanics;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class HidePlayer : MonoBehaviour
 {
@@ -11,19 +13,47 @@ public class HidePlayer : MonoBehaviour
     private bool canHide = false;
     private bool isHidden = false;
 
+    internal Animator animator;
 
-    private void Update()
+    void Awake()
+    {
+        animator = playerObject.GetComponent<Animator>();
+    }
+
+
+    private async void Update()
     {
         if (canHide && Input.GetKeyDown(interactKey))
         {
             if (playerCollider != null && playerObject != null)
             {
                 isHidden = !isHidden;
-                // Disable the entire player object
-                playerObject.SetActive(!isHidden);
-                // You can add additional logic here, like playing an animation or sound
-                // to indicate that the object is hidden.
+                StartCoroutine(TogglePlayerVisibility(isHidden));
             }
+        }
+    }
+
+    private IEnumerator TogglePlayerVisibility(bool isHidden)
+    {
+        if (isHidden)
+        {
+            Debug.Log("Player hiding animation playing now");
+            // start the animation
+            animator.SetBool("hidden", isHidden);
+
+            Debug.Log(animator.GetCurrentAnimatorStateInfo(0).length);
+            // wait for the animation to stop playing
+            yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
+
+            Debug.Log("Player hiding now");
+            // disable the player object
+            playerObject.SetActive(!isHidden);
+        } else
+        {
+            Debug.Log("Player coming out of hiding now");
+            // else enable the player obj and then start the animation
+            playerObject.SetActive(!isHidden);
+            animator.SetBool("hidden", isHidden);
         }
     }
 
