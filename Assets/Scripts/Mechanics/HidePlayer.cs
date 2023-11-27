@@ -9,15 +9,20 @@ public class HidePlayer : MonoBehaviour
     public string interactKey = "e"; // The key to press for interaction (default is "e")
     public Collider2D playerCollider; // Reference to the player's Collider2D
     public GameObject playerObject; // Reference to the player's GameObject
+    public AudioClip hideSound; // Audio clip for hiding
+    public AudioClip revealSound; // Audio clip for coming out of hiding
 
     private bool canHide = false;
     private bool isHidden = false;
 
     internal Animator animator;
+    private AudioSource audioSource;
 
     void Awake()
     {
         animator = playerObject.GetComponent<Animator>();
+        audioSource = playerObject.GetComponent<AudioSource>();
+
     }
 
 
@@ -38,6 +43,13 @@ public class HidePlayer : MonoBehaviour
         if (isHidden)
         {
             Debug.Log("Player hiding animation playing now");
+
+            if (hideSound != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(hideSound);
+            }
+
+
             // start the animation
             animator.SetBool("hidden", isHidden);
 
@@ -51,6 +63,11 @@ public class HidePlayer : MonoBehaviour
         } else
         {
             Debug.Log("Player coming out of hiding now");
+
+            if (revealSound != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(revealSound);
+            }
             // else enable the player obj and then start the animation
             playerObject.SetActive(!isHidden);
             animator.SetBool("hidden", isHidden);

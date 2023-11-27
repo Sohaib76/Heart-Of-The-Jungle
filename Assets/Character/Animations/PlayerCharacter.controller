@@ -198,7 +198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   t: 0
   modulus: 1
-  clip: {fileID: 8300000, guid: bdb49257b73be764a8c04e4f37302e0e, type: 3}
+  clip: {fileID: 8300000, guid: 502912f902579f64da5bcc110552f2a1, type: 3}
 --- !u!1102 &-4600178282907952025
 AnimatorState:
   serializedVersion: 6
@@ -758,7 +758,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   t: 0.5
   modulus: 1
-  clip: {fileID: 8300000, guid: 3318e557ea5714340abb5376ce7fb8c6, type: 3}
+  clip: {fileID: 8300000, guid: 0c5ee03abc13f2a4b9b0bb7832a399bd, type: 3}
 --- !u!1101 &4360397456269398219
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
