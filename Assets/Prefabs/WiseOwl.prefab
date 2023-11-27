@@ -130,7 +130,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.5, y: 3.3}
+  m_Size: {x: 6.5, y: 5.5}
   m_EdgeRadius: 0
 --- !u!95 &6474080447484083012
 Animator:
@@ -165,5 +165,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21191a5050c2f114396867ceee1422f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dialogueCanvasPrefab: {fileID: 2316011276529736185, guid: 3a8cae1fffdccb143839da425b2b5f0a,
+    type: 3}
+  dictCounter: 0
   interactKey: e
   playerObject: {fileID: 0}
