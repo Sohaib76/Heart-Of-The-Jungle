@@ -10,6 +10,8 @@ public class VictoryItemPickup : MonoBehaviour
     [SerializeField]
     private GameObject victoryModalPrefab;
 
+    
+
     public string interactKey = "e"; // The key to press for interaction (default is "e")
 
     /**
@@ -61,6 +63,8 @@ public class VictoryItemPickup : MonoBehaviour
         dialogueCanvas.transform.SetParent(GameObject.Find("DialogueUI").transform);
 
         // Instantiate a new victory modal canvas for the script to use
+        
+       
         victoryModalObject = Instantiate(victoryModalPrefab, Vector3.zero, Quaternion.identity);
         victoryModalObject.transform.SetParent(GameObject.Find("VictoryModalUI").transform);
 
