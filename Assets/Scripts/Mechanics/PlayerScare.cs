@@ -25,11 +25,15 @@ namespace Platformer.Gameplay
 
         public PlayerController playerController;
 
+        private Animator playerAnimator;
+
 
         // Rest of your script.
 
-
-
+        private void Start()
+        {
+            playerAnimator = GameObject.Find("Player").GetComponent<Animator>();
+        }
 
         private void Update()
         {
@@ -55,6 +59,8 @@ namespace Platformer.Gameplay
                 // Get the enemy GameObject and its Rigidbody2D.
                 GameObject enemyObject = hit.collider.gameObject;
                 Rigidbody2D enemyRigidbody = enemyObject.GetComponent<Rigidbody2D>();
+
+                playerAnimator.SetTrigger("playScareAnim");
 
                 // Define the movement speed.
                 float movementSpeed = 1.0f; // Adjust the speed as needed.
