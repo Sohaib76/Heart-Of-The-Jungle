@@ -12,11 +12,17 @@ public class HidePlayer : MonoBehaviour
     public AudioClip hideSound; // Audio clip for hiding
     public AudioClip revealSound; // Audio clip for coming out of hiding
 
+    public PlayerController playerController;
+
+    private bool isAnimationPlaying = false;
+
     private bool canHide = false;
     private bool isHidden = false;
 
     internal Animator animator;
     private AudioSource audioSource;
+
+    public GameObject eyeObject;
 
     void Awake()
     {
@@ -28,11 +34,13 @@ public class HidePlayer : MonoBehaviour
 
     private async void Update()
     {
-        if (canHide && Input.GetKeyDown(interactKey))
+        if (!isAnimationPlaying && canHide && Input.GetKeyDown(interactKey))
         {
+            playerController.controlEnabled = !playerController.controlEnabled;
             if (playerCollider != null && playerObject != null)
             {
                 isHidden = !isHidden;
+                isAnimationPlaying = true; // Set flag to true when animation starts
                 StartCoroutine(TogglePlayerVisibility(isHidden));
             }
         }
@@ -60,6 +68,8 @@ public class HidePlayer : MonoBehaviour
             Debug.Log("Player hiding now");
             // disable the player object
             playerObject.SetActive(!isHidden);
+            eyeObject.SetActive(isHidden);
+            isAnimationPlaying = false;
         } else
         {
             Debug.Log("Player coming out of hiding now");
@@ -70,7 +80,9 @@ public class HidePlayer : MonoBehaviour
             }
             // else enable the player obj and then start the animation
             playerObject.SetActive(!isHidden);
+            eyeObject.SetActive(isHidden);
             animator.SetBool("hidden", isHidden);
+            isAnimationPlaying = false;
         }
     }
 

@@ -10,9 +10,12 @@ public class TalkToPlayer : MonoBehaviour
 
     public string interactKey = "e"; // The key to press for interaction (default is "e")
 
+    public bool isLevel2 = false;
+
     // Hardcoded dialogue options
     private readonly Dictionary<int, string> beforeFindingScrollTalkWithOwl = new Dictionary<int, string>
     {
+        
         {1, "Greetings, noble red panda. I am the keeper of ancient wisdom, and my scrolls have been stolen " +
             "by mischievous goblins.Will you embark on a quest to retrieve them and safeguard the " +
             "knowledge within?" },
@@ -20,6 +23,16 @@ public class TalkToPlayer : MonoBehaviour
         {3,  "The goblins roam the depths of the jungle. Seek their lair and bring back the stolen " +
             "scrolls.The fate of our ancient knowledge rests upon your paws."},
     };
+
+    private readonly Dictionary<int, string> beforeFindingScrollTalkWithOwl2 = new Dictionary<int, string>
+    {
+
+        {1, "Oh no! It seems the goblins haven't stopped playing their evil plan. An important page"
+        + "of the scroll is ripped. I need to retrieve it. Can you help me?" },
+        {2,  "Of course I can help! Let's do it!"},
+        {3,  "Thank you for your help..."},
+    };
+
 
     private string owlName = "Wise Owl";
     private string pandaName = "Rori the Panda";
@@ -65,7 +78,15 @@ public class TalkToPlayer : MonoBehaviour
         tintedColor = pandaDialogueObject.transform.GetComponent<UnityEngine.UI.Image>().color;
 
         // Set up the appropriate initial data
-        dialogueTextBox.text = beforeFindingScrollTalkWithOwl[1];
+        if (!isLevel2)
+        {
+            dialogueTextBox.text = beforeFindingScrollTalkWithOwl[1];
+        }
+        else
+        {
+            dialogueTextBox.text = beforeFindingScrollTalkWithOwl2[1];
+        }
+        //dialogueTextBox.text = beforeFindingScrollTalkWithOwl[1];
         speakerTextBox.text = owlName;
     }
 
@@ -113,7 +134,15 @@ public class TalkToPlayer : MonoBehaviour
                     speakerTextBox.text = owlName;
                 }
 
-                dialogueTextBox.text = beforeFindingScrollTalkWithOwl[dialogueCounter];
+                if (!isLevel2)
+                {
+                    dialogueTextBox.text = beforeFindingScrollTalkWithOwl[dialogueCounter];
+                }
+                else
+                {
+                    dialogueTextBox.text = beforeFindingScrollTalkWithOwl2[dialogueCounter];
+                }
+                //dialogueTextBox.text = beforeFindingScrollTalkWithOwl[dialogueCounter];
             }
         }
 
