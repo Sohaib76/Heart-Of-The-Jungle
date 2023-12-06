@@ -1,3 +1,4 @@
+using Platformer.Mechanics;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,6 +63,8 @@ public class TalkToPlayer : MonoBehaviour
     private GameObject pandaDialogueObject;
     private GameObject owlDialogueObject;
 
+    public GameObject playerObject;
+
     private Vector3 oldOwlImagePosition;
     private Vector3 oldPandaImagePosition;
 
@@ -91,18 +94,6 @@ public class TalkToPlayer : MonoBehaviour
         oldPandaImagePosition = pandaDialogueObject.transform.position;
 
         tintedColor = pandaDialogueObject.transform.GetComponent<UnityEngine.UI.Image>().color;
-
-        // Set up the appropriate initial data
-        //if (!isLevel2)
-        //{
-        //    dialogueTextBox.text = beforeFindingScrollTalkWithOwl[1];
-        //}
-        //else
-        //{
-        //    dialogueTextBox.text = beforeFindingScrollTalkWithOwl2[1];
-        //}
-        //dialogueTextBox.text = beforeFindingScrollTalkWithOwl[1];
-        //speakerTextBox.text = owlName;
     }
 
     // Update is called once per frame
@@ -114,6 +105,7 @@ public class TalkToPlayer : MonoBehaviour
             {
                 isTalking = true;
                 ShowCanvasGroup(true);
+                playerObject.GetComponent<PlayerController>().controlEnabled = false;
 
                 // Highlight the owl first
                 HighlightSpeaker(owlName);
@@ -147,7 +139,8 @@ public class TalkToPlayer : MonoBehaviour
 
                     ShowCanvasGroup(false);
                     isTalking = false;
-
+                    playerObject.GetComponent<PlayerController>().controlEnabled = true;
+                    
                     return;
                 }
 

@@ -1,3 +1,4 @@
+using Platformer.Mechanics;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,6 +60,8 @@ public class VictoryItemPickup : MonoBehaviour
     private GameObject pandaDialogueObject;
     private GameObject owlDialogueObject;
 
+    public GameObject playerObject;
+
     private Vector3 oldOwlImagePosition;
     private Vector3 oldPandaImagePosition;
 
@@ -111,6 +114,7 @@ public class VictoryItemPickup : MonoBehaviour
             if (!isTalking)
             {
                 isTalking = true;
+                playerObject.GetComponent<PlayerController>().controlEnabled = false;
 
                 // Hide the item picked up
                 transform.GetComponent<SpriteRenderer>().enabled = false;
