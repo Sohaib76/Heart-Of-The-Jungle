@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -8,6 +9,16 @@ public class TalkToPlayer : MonoBehaviour
     [SerializeField]
     private GameObject dialogueCanvasPrefab;
 
+    [SerializeField] float timeBtwnChars = 0.02f;
+    [SerializeField] float timeBtwnWords = 1.0f;
+
+    [SerializeField] float pandaPitchValue = 1.0f;
+    [SerializeField] float owlPitchValue = 2.5f;
+
+    public AudioClip dialogueSpeakClip;
+
+    private AudioSource audioSource;
+
     public string interactKey = "e"; // The key to press for interaction (default is "e")
 
     public bool isLevel2 = false;
@@ -17,7 +28,7 @@ public class TalkToPlayer : MonoBehaviour
     {
         
         {1, "Greetings, noble red panda. I am the keeper of ancient wisdom, and my scrolls have been stolen " +
-            "by mischievous goblins.Will you embark on a quest to retrieve them and safeguard the " +
+            "by mischievous goblins. Will you embark on a quest to retrieve them and safeguard the " +
             "knowledge within?" },
         {2,  "I'm ready to help! What can you tell me about these goblins and the scrolls?"},
         {3,  "The goblins roam the depths of the jungle. Seek their lair and bring back the stolen " +
@@ -30,7 +41,7 @@ public class TalkToPlayer : MonoBehaviour
         {1, "Oh no! It seems the goblins haven't stopped playing their evil plan. An important page"
         + "of the scroll is ripped. I need to retrieve it. Can you help me?" },
         {2,  "Of course I can help! Let's do it!"},
-        {3,  "Thank you for your help..."},
+        {3,  "Thank you for your help once again..."},
     };
 
 
@@ -40,6 +51,8 @@ public class TalkToPlayer : MonoBehaviour
     private int dialogueCounter = 0;
     private bool isTalking = false;
     private bool isNearby = false;
+
+    private bool sentenceEnded = false;
 
     private TextMeshProUGUI dialogueTextBox;
     private TextMeshProUGUI speakerTextBox;
@@ -65,6 +78,9 @@ public class TalkToPlayer : MonoBehaviour
         // Find and disable the canvas objects
         canvasGroup = dialogueCanvas.GetComponent<CanvasGroup>();
 
+        audioSource = this.gameObject.AddComponent<AudioSource>();
+        audioSource.volume = 0.3f;
+
         // Find all the relevant child game objects
         dialogueTextBox = dialogueCanvas.transform.Find("DialogueTextBox").GetComponent<TextMeshProUGUI>();
         speakerTextBox = dialogueCanvas.transform.Find("SpeakerTextBox").GetComponent <TextMeshProUGUI>();
@@ -78,16 +94,16 @@ public class TalkToPlayer : MonoBehaviour
         tintedColor = pandaDialogueObject.transform.GetComponent<UnityEngine.UI.Image>().color;
 
         // Set up the appropriate initial data
-        if (!isLevel2)
-        {
-            dialogueTextBox.text = beforeFindingScrollTalkWithOwl[1];
-        }
-        else
-        {
-            dialogueTextBox.text = beforeFindingScrollTalkWithOwl2[1];
-        }
+        //if (!isLevel2)
+        //{
+        //    dialogueTextBox.text = beforeFindingScrollTalkWithOwl[1];
+        //}
+        //else
+        //{
+        //    dialogueTextBox.text = beforeFindingScrollTalkWithOwl2[1];
+        //}
         //dialogueTextBox.text = beforeFindingScrollTalkWithOwl[1];
-        speakerTextBox.text = owlName;
+        //speakerTextBox.text = owlName;
     }
 
     // Update is called once per frame
@@ -102,6 +118,19 @@ public class TalkToPlayer : MonoBehaviour
 
                 // Highlight the owl first
                 HighlightSpeaker(owlName);
+                speakerTextBox.text = owlName;
+
+                dialogueCounter++;
+                if (!isLevel2)
+                {
+                    dialogueTextBox.text = beforeFindingScrollTalkWithOwl[dialogueCounter];
+                }
+                else
+                {
+                    dialogueTextBox.text = beforeFindingScrollTalkWithOwl2[dialogueCounter];
+                }
+
+                StartCoroutine(TextVisible());
 
                 return;
             }
@@ -142,6 +171,8 @@ public class TalkToPlayer : MonoBehaviour
                 {
                     dialogueTextBox.text = beforeFindingScrollTalkWithOwl2[dialogueCounter];
                 }
+
+                StartCoroutine(TextVisible());
                 //dialogueTextBox.text = beforeFindingScrollTalkWithOwl[dialogueCounter];
             }
         }
@@ -154,6 +185,41 @@ public class TalkToPlayer : MonoBehaviour
             isTalking = false;
 
             return;
+        }
+    }
+
+    private IEnumerator TextVisible()
+    {
+        dialogueTextBox.ForceMeshUpdate();
+        int totalVisibleCharacters = dialogueTextBox.textInfo.characterCount;
+        int counter = 0;
+
+        while (true)
+        {
+            int visibleCount = counter % (totalVisibleCharacters + 1);
+            dialogueTextBox.maxVisibleCharacters = visibleCount;
+            
+            if (visibleCount % 3 == 0)
+            {
+                if (dialogueCounter % 2 == 0) // panda is talking
+                {
+                    audioSource.pitch = pandaPitchValue;
+                }
+                else
+                {
+                    audioSource.pitch = owlPitchValue;
+                }
+                audioSource.PlayOneShot(dialogueSpeakClip);
+            }
+
+            if (visibleCount >= totalVisibleCharacters)
+            {
+                //sentenceEnded = true;
+                break;
+            }
+
+            counter += 1;
+            yield return new WaitForSeconds(timeBtwnChars);
         }
     }
 

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -10,7 +11,16 @@ public class VictoryItemPickup : MonoBehaviour
     [SerializeField]
     private GameObject victoryModalPrefab;
 
-    
+
+    [SerializeField] float timeBtwnChars = 0.02f;
+    [SerializeField] float timeBtwnWords = 1.0f;
+
+    [SerializeField] float pandaPitchValue = 1.0f;
+    [SerializeField] float owlPitchValue = 2.5f;
+
+    public AudioClip dialogueSpeakClip;
+
+    private AudioSource audioSource;
 
     public string interactKey = "e"; // The key to press for interaction (default is "e")
 
@@ -62,8 +72,7 @@ public class VictoryItemPickup : MonoBehaviour
         dialogueCanvas = Instantiate(dialogueCanvasPrefab, Vector3.zero, Quaternion.identity);
         dialogueCanvas.transform.SetParent(GameObject.Find("DialogueUI").transform);
 
-        // Instantiate a new victory modal canvas for the script to use
-        
+        audioSource = this.gameObject.AddComponent<AudioSource>();
        
         victoryModalObject = Instantiate(victoryModalPrefab, Vector3.zero, Quaternion.identity);
         victoryModalObject.transform.SetParent(GameObject.Find("VictoryModalUI").transform);
@@ -83,10 +92,6 @@ public class VictoryItemPickup : MonoBehaviour
         oldPandaImagePosition = pandaDialogueObject.transform.position;
 
         tintedColor = pandaDialogueObject.transform.GetComponent<UnityEngine.UI.Image>().color;
-
-        // Set up the appropriate initial data
-        dialogueTextBox.text = afterFindingScrollTalkWithOwl[1];
-        speakerTextBox.text = owlName;
     }
 
     // Update is called once per frame
@@ -95,7 +100,7 @@ public class VictoryItemPickup : MonoBehaviour
         if (itemPickedUp)
         {
             // Start the dialogue
-            if (!isTalking && Input.GetKeyDown(interactKey))
+            if (!isTalking)
             {
                 isTalking = true;
 
@@ -103,10 +108,14 @@ public class VictoryItemPickup : MonoBehaviour
                 transform.GetComponent<SpriteRenderer>().enabled = false;
 
                 ShowCanvasGroup(dialogueCanvasGroup, true);
+                dialogueCounter++;
 
                 // Highlight the owl first
                 HighlightSpeaker(owlName);
-
+                speakerTextBox.text = owlName;
+                dialogueTextBox.text = afterFindingScrollTalkWithOwl[dialogueCounter];
+           
+                StartCoroutine(TextVisible());
                 return;
             }
 
@@ -141,7 +150,43 @@ public class VictoryItemPickup : MonoBehaviour
                 }
 
                 dialogueTextBox.text = afterFindingScrollTalkWithOwl[dialogueCounter];
+                StartCoroutine(TextVisible());
             }
+        }
+    }
+
+    private IEnumerator TextVisible()
+    {
+        dialogueTextBox.ForceMeshUpdate();
+        int totalVisibleCharacters = dialogueTextBox.textInfo.characterCount;
+        int counter = 0;
+
+        while (true)
+        {
+            int visibleCount = counter % (totalVisibleCharacters + 1);
+            dialogueTextBox.maxVisibleCharacters = visibleCount;
+
+            if (visibleCount % 3 == 0)
+            {
+                if (dialogueCounter % 2 == 0) // panda is talking
+                {
+                    audioSource.pitch = pandaPitchValue;
+                }
+                else
+                {
+                    audioSource.pitch = owlPitchValue;
+                }
+                audioSource.PlayOneShot(dialogueSpeakClip);
+            }
+
+            if (visibleCount >= totalVisibleCharacters)
+            {
+                //sentenceEnded = true;
+                break;
+            }
+
+            counter += 1;
+            yield return new WaitForSeconds(timeBtwnChars);
         }
     }
 
