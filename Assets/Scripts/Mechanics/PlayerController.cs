@@ -32,13 +32,17 @@ namespace Platformer.Mechanics
         /*internal new*/ public Collider2D collider2d;
         /*internal new*/ public AudioSource audioSource;
         public Health health;
-        public bool controlEnabled = true;
+        public bool controlEnabled = false;
+
+        private string interactKey = "e";
 
         bool jump;
         Vector2 move;
         SpriteRenderer spriteRenderer;
         internal Animator animator;
         readonly PlatformerModel model = Simulation.GetModel<PlatformerModel>();
+
+        public GameObject tutorialCanvas;
 
         public Bounds Bounds => collider2d.bounds;
 
@@ -49,10 +53,18 @@ namespace Platformer.Mechanics
             collider2d = GetComponent<Collider2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
+
+            tutorialCanvas = GameObject.Find("TutorialUI/TutorialCanvas");
         }
 
         protected override void Update()
         {
+            if (tutorialCanvas != null && tutorialCanvas.activeSelf && Input.GetKeyDown(interactKey))
+            {
+                tutorialCanvas.SetActive(false);
+                controlEnabled = true;
+            }
+
             if (controlEnabled)
             {
                 move.x = Input.GetAxis("Horizontal");
