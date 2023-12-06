@@ -16,8 +16,6 @@ public class HidePlayer : MonoBehaviour
 
     public AudioSource audioSource;
 
-    private bool isAnimationPlaying = false;
-
     private bool canHide = false;
     private bool isHidden = false;
 
@@ -32,69 +30,51 @@ public class HidePlayer : MonoBehaviour
     {
         animator = playerObject.GetComponent<Animator>();
         //audioSource = playerObject.GetComponent<AudioSource>();
-
     }
 
 
-    private async void Update()
+    private void Update()
     {
-        if (!isAnimationPlaying && canHide && Input.GetKeyDown(interactKey))
+        if (canHide && Input.GetKeyDown(interactKey))
         {
             playerController.controlEnabled = !playerController.controlEnabled;
             if (playerCollider != null && playerObject != null)
             {
                 isHidden = !isHidden;
-                isAnimationPlaying = true; // Set flag to true when animation starts
-                StartCoroutine(TogglePlayerVisibility(isHidden));
+                if (isHidden)
+                {
+                    if (hideSound != null && audioSource != null)
+                    {
+                        //audioSource.PlayOneShot(hideSound);
+                        //audioSource.Play(hideSound);
+                        //audioSource.clip = hideSound;
+                        audioSource.Play();
+                        targetAudioSource.enabled = false;
+                    }
+
+                    Debug.Log("Player hiding now");
+                    // disable the player object
+                    playerObject.SetActive(!isHidden);
+                    eyeObject.SetActive(isHidden);
+                }
+                else
+                {
+                    Debug.Log("Player coming out of hiding now");
+
+                    if (revealSound != null && audioSource != null)
+                    {
+                        //audioSource.PlayOneShot(revealSound);
+                        // audioSource.Play();
+                        targetAudioSource.enabled = true;
+                        audioSource.Stop();
+
+                    }
+                    // else enable the player obj and then start the animation
+                    playerObject.SetActive(!isHidden);
+                    eyeObject.SetActive(isHidden);
+                    animator.SetBool("hidden", isHidden);
+                }
             }
-        }
-    }
-
-    private IEnumerator TogglePlayerVisibility(bool isHidden)
-    {
-        if (isHidden)
-        {
-            Debug.Log("Player hiding animation playing now");
-
-            if (hideSound != null && audioSource != null)
-            {
-                //audioSource.PlayOneShot(hideSound);
-                //audioSource.Play(hideSound);
-                //audioSource.clip = hideSound;
-                audioSource.Play();
-                targetAudioSource.enabled = false;
-            }
-
-
-            // start the animation
-            animator.SetBool("hidden", isHidden);
-
-            Debug.Log(animator.GetCurrentAnimatorStateInfo(0).length);
-            // wait for the animation to stop playing
-            yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
-
-            Debug.Log("Player hiding now");
-            // disable the player object
-            playerObject.SetActive(!isHidden);
-            eyeObject.SetActive(isHidden);
-            isAnimationPlaying = false;
-        } else
-        {
-            Debug.Log("Player coming out of hiding now");
-
-            if (revealSound != null && audioSource != null)
-            {
-                //audioSource.PlayOneShot(revealSound);
-                // audioSource.Play();
-                targetAudioSource.enabled = true;
-                audioSource.Stop();
-
-            }
-            // else enable the player obj and then start the animation
-            playerObject.SetActive(!isHidden);
-            eyeObject.SetActive(isHidden);
-            animator.SetBool("hidden", isHidden);
-            isAnimationPlaying = false;
         }
     }
 
