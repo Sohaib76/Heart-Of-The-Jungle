@@ -17,7 +17,7 @@ public class HidePlayer : MonoBehaviour
     public AudioSource audioSource;
 
     private bool canHide = false;
-    private bool isHidden = false;
+    public bool isHidden {get; private set;}= false;
 
     internal Animator animator;
     // private AudioSource audioSource;

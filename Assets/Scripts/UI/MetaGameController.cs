@@ -26,6 +26,9 @@ namespace Platformer.UI
         public GameController gameController;
 
         bool showMainCanvas = false;
+        public AudioSource bgMusicAudioSource;
+        public AudioSource hidingBgAudioSource;
+        private HidePlayer hidePlayer;
 
         void OnEnable()
         {
@@ -46,19 +49,42 @@ namespace Platformer.UI
 
         void _ToggleMainMenu(bool show)
         {
-            // if (show)
-            // {
-            //     Time.timeScale = 0;
-            //     mainMenu.gameObject.SetActive(true);
-            //     foreach (var i in gamePlayCanvasii) i.gameObject.SetActive(false);
-            // }
-            // else
-            // {
-            //     Time.timeScale = 1;
-            //     mainMenu.gameObject.SetActive(false);
-            //     foreach (var i in gamePlayCanvasii) i.gameObject.SetActive(true);
-            // }
-            // this.showMainCanvas = show;
+            if (show)
+            {
+                // game is paused
+                Time.timeScale = 0;
+                mainMenu.gameObject.SetActive(true);
+                foreach (var i in gamePlayCanvasii) i.gameObject.SetActive(false);
+            
+                // pause the music as well
+                AudioSource[] audios = FindObjectsOfType<AudioSource>();
+                foreach(var a in audios)
+                {
+                    a.Pause();
+                }
+            }
+            else
+            {
+                Time.timeScale = 1;
+                mainMenu.gameObject.SetActive(false);
+                foreach (var i in gamePlayCanvasii) i.gameObject.SetActive(true);
+            
+                //resume the music as well
+                if(!hidePlayer){
+                    hidePlayer = FindObjectOfType<HidePlayer>();
+                }
+                if(hidePlayer.isHidden){
+                    if(hidingBgAudioSource.isActiveAndEnabled){
+                        hidingBgAudioSource.Play();
+                    }
+                }
+                else{
+                    if(bgMusicAudioSource.isActiveAndEnabled){
+                        bgMusicAudioSource.Play();
+                    }
+                }
+            }
+            this.showMainCanvas = show;
         }
 
         void Update()

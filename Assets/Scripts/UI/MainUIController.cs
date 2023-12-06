@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 namespace Platformer.UI
 {
@@ -9,21 +12,38 @@ namespace Platformer.UI
     /// </summary>
     public class MainUIController : MonoBehaviour
     {
-        public GameObject[] panels;
+        public Button resumeBtn;
+        public Button mainMenuBtn;
 
-        public void SetActivePanel(int index)
+        public MetaGameController metaGameController;
+
+        // public GameObject[] panels;
+
+        // public void SetActivePanel(int index)
+        // {
+        //     for (var i = 0; i < panels.Length; i++)
+        //     {
+        //         var active = i == index;
+        //         var g = panels[i];
+        //         if (g.activeSelf != active) g.SetActive(active);
+        //     }
+        // }
+
+        // void OnEnable()
+        // {
+            
+        // }
+
+        void Start()
         {
-            for (var i = 0; i < panels.Length; i++)
+            metaGameController = FindObjectOfType<MetaGameController>();
+            if(!metaGameController)
             {
-                var active = i == index;
-                var g = panels[i];
-                if (g.activeSelf != active) g.SetActive(active);
+                metaGameController = gameObject.AddComponent<MetaGameController>();
             }
-        }
+            resumeBtn.onClick.AddListener(delegate{metaGameController.ToggleMainMenu(false);});
+            mainMenuBtn.onClick.AddListener(delegate{SceneManager.LoadScene(0);});
 
-        void OnEnable()
-        {
-            SetActivePanel(0);
         }
     }
 }
