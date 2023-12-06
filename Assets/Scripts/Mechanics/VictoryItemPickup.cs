@@ -13,7 +13,6 @@ public class VictoryItemPickup : MonoBehaviour
 
 
     [SerializeField] float timeBtwnChars = 0.02f;
-    [SerializeField] float timeBtwnWords = 1.0f;
 
     [SerializeField] float pandaPitchValue = 1.0f;
     [SerializeField] float owlPitchValue = 2.5f;
@@ -43,6 +42,8 @@ public class VictoryItemPickup : MonoBehaviour
     private int dialogueCounter = 0;
     private bool isTalking = false;
     private bool itemPickedUp = false;
+
+    private bool sentenceEnded = false;
 
     private TextMeshProUGUI dialogueTextBox;
     private TextMeshProUGUI speakerTextBox;
@@ -119,7 +120,7 @@ public class VictoryItemPickup : MonoBehaviour
                 return;
             }
 
-            if (isTalking && Input.GetKeyDown(interactKey))
+            if (isTalking && sentenceEnded && Input.GetKeyDown(interactKey))
             {
                 dialogueCounter++;
 
@@ -161,6 +162,8 @@ public class VictoryItemPickup : MonoBehaviour
         int totalVisibleCharacters = dialogueTextBox.textInfo.characterCount;
         int counter = 0;
 
+        sentenceEnded = false;
+
         while (true)
         {
             int visibleCount = counter % (totalVisibleCharacters + 1);
@@ -181,7 +184,7 @@ public class VictoryItemPickup : MonoBehaviour
 
             if (visibleCount >= totalVisibleCharacters)
             {
-                //sentenceEnded = true;
+                sentenceEnded = true;
                 break;
             }
 

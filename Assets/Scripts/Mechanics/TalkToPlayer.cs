@@ -10,7 +10,6 @@ public class TalkToPlayer : MonoBehaviour
     private GameObject dialogueCanvasPrefab;
 
     [SerializeField] float timeBtwnChars = 0.02f;
-    [SerializeField] float timeBtwnWords = 1.0f;
 
     [SerializeField] float pandaPitchValue = 1.0f;
     [SerializeField] float owlPitchValue = 2.5f;
@@ -138,7 +137,7 @@ public class TalkToPlayer : MonoBehaviour
 
         if (isTalking)
         {
-            if (Input.GetKeyDown(interactKey) && isNearby)
+            if (Input.GetKeyDown(interactKey) && isNearby && sentenceEnded)
             {
                 dialogueCounter++;
 
@@ -194,6 +193,8 @@ public class TalkToPlayer : MonoBehaviour
         int totalVisibleCharacters = dialogueTextBox.textInfo.characterCount;
         int counter = 0;
 
+        sentenceEnded = false;
+
         while (true)
         {
             int visibleCount = counter % (totalVisibleCharacters + 1);
@@ -214,7 +215,7 @@ public class TalkToPlayer : MonoBehaviour
 
             if (visibleCount >= totalVisibleCharacters)
             {
-                //sentenceEnded = true;
+                sentenceEnded = true;
                 break;
             }
 

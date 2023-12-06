@@ -614,10 +614,11 @@ MonoBehaviour:
     - jump
 
 
-    E - interact with NPCs and objects
+    E - interact with NPCs, hide in specific locations
 
 
-    Q - Hide in specific locations'
+    Q - scare
+    the blue trolls'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2abf75d6e0d8a4aa6910fae6ee5d638b, type: 2}
   m_sharedMaterial: {fileID: 21352953850445826, guid: 2abf75d6e0d8a4aa6910fae6ee5d638b,
