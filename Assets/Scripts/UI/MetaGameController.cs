@@ -46,19 +46,19 @@ namespace Platformer.UI
 
         void _ToggleMainMenu(bool show)
         {
-            if (show)
-            {
-                Time.timeScale = 0;
-                mainMenu.gameObject.SetActive(true);
-                foreach (var i in gamePlayCanvasii) i.gameObject.SetActive(false);
-            }
-            else
-            {
-                Time.timeScale = 1;
-                mainMenu.gameObject.SetActive(false);
-                foreach (var i in gamePlayCanvasii) i.gameObject.SetActive(true);
-            }
-            this.showMainCanvas = show;
+            // if (show)
+            // {
+            //     Time.timeScale = 0;
+            //     mainMenu.gameObject.SetActive(true);
+            //     foreach (var i in gamePlayCanvasii) i.gameObject.SetActive(false);
+            // }
+            // else
+            // {
+            //     Time.timeScale = 1;
+            //     mainMenu.gameObject.SetActive(false);
+            //     foreach (var i in gamePlayCanvasii) i.gameObject.SetActive(true);
+            // }
+            // this.showMainCanvas = show;
         }
 
         void Update()
