@@ -26,6 +26,8 @@ namespace Platformer.Gameplay
         public PlayerController playerController;
 
         private Animator playerAnimator;
+        
+
 
 
         // Rest of your script.
@@ -59,9 +61,10 @@ namespace Platformer.Gameplay
                 // Get the enemy GameObject and its Rigidbody2D.
                 GameObject enemyObject = hit.collider.gameObject;
                 Rigidbody2D enemyRigidbody = enemyObject.GetComponent<Rigidbody2D>();
+                Animator trollAnimator = enemyObject.GetComponent<Animator>();
 
                 playerAnimator.SetTrigger("playScareAnim");
-
+                trollAnimator.SetTrigger("trollScared");
                 // Define the movement speed.
                 float movementSpeed = 1.0f; // Adjust the speed as needed.
 
