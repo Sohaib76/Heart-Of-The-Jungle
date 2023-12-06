@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class VictoryItemPickup : MonoBehaviour
 {
@@ -16,6 +17,10 @@ public class VictoryItemPickup : MonoBehaviour
 
     [SerializeField] float pandaPitchValue = 1.0f;
     [SerializeField] float owlPitchValue = 2.5f;
+
+    //public PlayerController playerController;
+
+    public AudioSource targetAudioSource;
 
     public AudioClip dialogueSpeakClip;
 
@@ -78,7 +83,7 @@ public class VictoryItemPickup : MonoBehaviour
        
         victoryModalObject = Instantiate(victoryModalPrefab, Vector3.zero, Quaternion.identity);
         victoryModalObject.transform.SetParent(GameObject.Find("VictoryModalUI").transform);
-        victoryAudio.Play();
+        //victoryAudio.Play();
 
         // Find and disable the canvas objects
         dialogueCanvasGroup = dialogueCanvas.GetComponent<CanvasGroup>();
@@ -154,7 +159,12 @@ public class VictoryItemPickup : MonoBehaviour
 
                 dialogueTextBox.text = afterFindingScrollTalkWithOwl[dialogueCounter];
                 StartCoroutine(TextVisible());
+                
             }
+            victoryAudio.Play();
+            targetAudioSource.enabled = false;
+            //playerController.controlEnabled = false;
+
         }
     }
 
