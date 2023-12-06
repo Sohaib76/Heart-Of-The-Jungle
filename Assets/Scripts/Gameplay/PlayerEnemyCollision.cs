@@ -22,6 +22,8 @@ namespace Platformer.Gameplay
         {
             var willHurtEnemy = player.Bounds.center.y >= enemy.Bounds.max.y;
 
+            willHurtEnemy = false;
+
             if (willHurtEnemy)
             {
                 var enemyHealth = enemy.GetComponent<Health>();
