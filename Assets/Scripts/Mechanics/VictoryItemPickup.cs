@@ -65,6 +65,7 @@ public class VictoryItemPickup : MonoBehaviour
     private GameObject victoryModalObject;
     private CanvasGroup victoryModalCanvasGroup;
 
+    public AudioSource victoryAudio;
 
     // Start is called before the first frame update
     void Start()
@@ -77,6 +78,7 @@ public class VictoryItemPickup : MonoBehaviour
        
         victoryModalObject = Instantiate(victoryModalPrefab, Vector3.zero, Quaternion.identity);
         victoryModalObject.transform.SetParent(GameObject.Find("VictoryModalUI").transform);
+        victoryAudio.Play();
 
         // Find and disable the canvas objects
         dialogueCanvasGroup = dialogueCanvas.GetComponent<CanvasGroup>();

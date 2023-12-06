@@ -14,20 +14,24 @@ public class HidePlayer : MonoBehaviour
 
     public PlayerController playerController;
 
+    public AudioSource audioSource;
+
     private bool isAnimationPlaying = false;
 
     private bool canHide = false;
     private bool isHidden = false;
 
     internal Animator animator;
-    private AudioSource audioSource;
+    // private AudioSource audioSource;
 
     public GameObject eyeObject;
+
+    public AudioSource targetAudioSource;
 
     void Awake()
     {
         animator = playerObject.GetComponent<Animator>();
-        audioSource = playerObject.GetComponent<AudioSource>();
+        //audioSource = playerObject.GetComponent<AudioSource>();
 
     }
 
@@ -54,7 +58,11 @@ public class HidePlayer : MonoBehaviour
 
             if (hideSound != null && audioSource != null)
             {
-                audioSource.PlayOneShot(hideSound);
+                //audioSource.PlayOneShot(hideSound);
+                //audioSource.Play(hideSound);
+                //audioSource.clip = hideSound;
+                audioSource.Play();
+                targetAudioSource.enabled = false;
             }
 
 
@@ -76,7 +84,11 @@ public class HidePlayer : MonoBehaviour
 
             if (revealSound != null && audioSource != null)
             {
-                audioSource.PlayOneShot(revealSound);
+                //audioSource.PlayOneShot(revealSound);
+                // audioSource.Play();
+                targetAudioSource.enabled = true;
+                audioSource.Stop();
+
             }
             // else enable the player obj and then start the animation
             playerObject.SetActive(!isHidden);
