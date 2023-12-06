@@ -26,6 +26,8 @@ namespace Platformer.Gameplay
         public PlayerController playerController;
 
         private Animator playerAnimator;
+
+        public AudioSource scareAudio;
         
 
 
@@ -64,6 +66,7 @@ namespace Platformer.Gameplay
                 Animator trollAnimator = enemyObject.GetComponent<Animator>();
 
                 playerAnimator.SetTrigger("playScareAnim");
+                scareAudio.Play();
                 trollAnimator.SetTrigger("trollScared");
                 // Define the movement speed.
                 float movementSpeed = 1.0f; // Adjust the speed as needed.
