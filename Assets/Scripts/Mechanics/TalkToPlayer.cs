@@ -39,7 +39,7 @@ public class TalkToPlayer : MonoBehaviour
     {
 
         {1, "Oh no! It seems the goblins haven't stopped playing their evil plan. An important page"
-        + "of the scroll is ripped. I need to retrieve it. Can you help me?" },
+        + " of the scroll is ripped. I need to retrieve it. Can you help me?" },
         {2,  "Of course I can help! Let's do it!"},
         {3,  "Thank you for your help once again..."},
     };
